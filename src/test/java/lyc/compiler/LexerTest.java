@@ -18,7 +18,7 @@ import static lyc.compiler.constants.Constants.MAX_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-@Disabled
+//@Disabled
 public class LexerTest {
 
   private Lexer lexer;
@@ -26,10 +26,10 @@ public class LexerTest {
 
   @Test
   public void comment() throws Exception{
-    scan("/*This is a comment*/");
+    scan("#+This is a comment+#");
     assertThat(nextToken()).isEqualTo(ParserSym.EOF);
   }
-
+  @Disabled
   @Test
   public void invalidStringConstantLength() {
     assertThrows(InvalidLengthException.class, () -> {
@@ -37,7 +37,7 @@ public class LexerTest {
       nextToken();
     });
   }
-
+  @Disabled
   @Test
   public void invalidIdLength() {
     assertThrows(InvalidLengthException.class, () -> {
@@ -45,7 +45,7 @@ public class LexerTest {
       nextToken();
     });
   }
-
+  @Disabled
   @Test
   public void invalidPositiveIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
@@ -53,7 +53,7 @@ public class LexerTest {
       nextToken();
     });
   }
-
+  @Disabled
   @Test
   public void invalidNegativeIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
@@ -65,7 +65,7 @@ public class LexerTest {
 
   @Test
   public void assignmentWithExpressions() throws Exception {
-    scan("c=d*(e-21)/4");
+    scan("c:=d*(e-21)/4");
     assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
     assertThat(nextToken()).isEqualTo(ParserSym.ASSIG);
     assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);

@@ -13,8 +13,20 @@ terminal MULT;
 terminal DIV;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
+terminal OPEN_CURLY_BRACKET;
+terminal CLOSE_CURLY_BRACKET;
 terminal INTEGER_CONSTANT;
+terminal FLOAT_CONSTANT;
+terminal STRING_CONSTANT;
+terminal COLON;
+terminal COMMA;
+
 terminal IDENTIFIER;
+
+terminal INIT;
+terminal INT;
+terminal STRING;
+terminal FLOAT;
 
 // Non Terminals
 non terminal sentence;
@@ -23,11 +35,17 @@ non terminal expression;
 non terminal term;
 non terminal factor;
 
+non terminal init_sentence;
+non terminal init_line;
+non terminal var_list;
+non terminal var_type;
+
 // Start Symbol Definition
 start with sentence;
 
 sentence ::= assignment {: System.out.println("End"); :};
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
+assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {: System.out.println("Assignment: "+constant); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
@@ -36,4 +54,16 @@ term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+
+//init
+sentence ::= init_sentence {: System.out.println("INIT"); :};
+init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
+init_line ::=  var_list COLON var_type init_line {: System.out.println("Linea declaracion de variables INIT"); :};
+init_line ::=  var_list COLON var_type {: System.out.println("Ultima Linea declaracion de variables INIT"); :};
+var_list ::= IDENTIFIER: id COMMA var_list {: System.out.println("Variable: "+id); :};
+var_list ::= IDENTIFIER: id {: System.out.println("Variable: "+id); :};
+var_type ::= STRING {: System.out.println("STRING"); :};
+var_type ::= INT {: System.out.println("INT"); :};
+var_type ::= FLOAT {: System.out.println("FLOAT"); :};
