@@ -77,15 +77,36 @@ Init = "init"
   {Float}                                 { return symbol(ParserSym.FLOAT); }
   {String}                                { return symbol(ParserSym.STRING); }
   /* identifiers */
-  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
+  {Identifier}                             {
+      String valor = yytext();
+      if (valor.length() > 50) {
+          throw new InvalidLengthException(yytext());
+      }
+      return symbol(ParserSym.IDENTIFIER, valor);
+  }
+  {Sub}                                    { return symbol(ParserSym.SUB); }
   /* Constants */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {IntegerConstant}                        {
+      String valor = yytext();
+      System.out.println(valor);
+      try {
+          int num = Integer.parseInt(valor);
+          return symbol(ParserSym.INTEGER_CONSTANT, valor);
+      } catch (NumberFormatException e) {
+          throw new InvalidIntegerException(valor);
+      }
+  }
   {FloatConstant}                          { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
-  {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
+  {StringConstant}                         {
+      String valor = yytext().substring(1, yytext().length() - 1);
+      if (valor.length() > 50) {
+          throw new InvalidLengthException(yytext());
+      }
+      return symbol(ParserSym.STRING_CONSTANT, valor);
+  }
 
   /* operators */
   {Plus}                                    { return symbol(ParserSym.PLUS); }
-  {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
   {Assig}                                   { return symbol(ParserSym.ASSIG); }

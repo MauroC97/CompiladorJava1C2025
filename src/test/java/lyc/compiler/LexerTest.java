@@ -23,13 +23,12 @@ public class LexerTest {
 
   private Lexer lexer;
 
-
   @Test
   public void comment() throws Exception{
     scan("#+This is a comment+#");
     assertThat(nextToken()).isEqualTo(ParserSym.EOF);
   }
-  @Disabled
+
   @Test
   public void invalidStringConstantLength() {
     assertThrows(InvalidLengthException.class, () -> {
@@ -37,7 +36,7 @@ public class LexerTest {
       nextToken();
     });
   }
-  @Disabled
+
   @Test
   public void invalidIdLength() {
     assertThrows(InvalidLengthException.class, () -> {
@@ -45,7 +44,7 @@ public class LexerTest {
       nextToken();
     });
   }
-  @Disabled
+
   @Test
   public void invalidPositiveIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
@@ -53,15 +52,15 @@ public class LexerTest {
       nextToken();
     });
   }
+
   @Disabled
   @Test
   public void invalidNegativeIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
       scan("%d".formatted(-9223372036854775807L));
-      nextToken();
+      System.out.println(nextToken());
     });
   }
-
 
   @Test
   public void assignmentWithExpressions() throws Exception {
