@@ -84,16 +84,18 @@ Init = "init"
       }
       return symbol(ParserSym.IDENTIFIER, valor);
   }
-  {Sub}                                    { return symbol(ParserSym.SUB); }
   /* Constants */
   {IntegerConstant}                        {
       String valor = yytext();
-      System.out.println(valor);
+      System.out.println("TOKEN IntegerConstant: " + valor);
       try {
-          int num = Integer.parseInt(valor);
+          java.math.BigInteger big = new java.math.BigInteger(valor);
+          if (big.compareTo(java.math.BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+              throw new InvalidIntegerException("Valor fuera de rango para int: " + valor);
+          }
           return symbol(ParserSym.INTEGER_CONSTANT, valor);
       } catch (NumberFormatException e) {
-          throw new InvalidIntegerException(valor);
+          throw new InvalidIntegerException("Formato inválido de número: " + valor);
       }
   }
   {FloatConstant}                          { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
@@ -107,6 +109,7 @@ Init = "init"
 
   /* operators */
   {Plus}                                    { return symbol(ParserSym.PLUS); }
+  {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
