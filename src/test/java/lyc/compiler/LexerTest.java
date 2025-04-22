@@ -53,13 +53,14 @@ public class LexerTest {
     });
   }
 
-  //@Test
-  //public void invalidNegativeIntegerConstantValue() {
-  //  assertThrows(InvalidIntegerException.class, () -> {
-  //    scan("%d".formatted(-9223372036854775807L));
-  //    nextToken();
-  //  });
-  //}
+  @Disabled
+  @Test
+  public void invalidNegativeIntegerConstantValue() {
+    assertThrows(InvalidIntegerException.class, () -> {
+      scan("%d".formatted(-9223372036854775807L));
+      nextToken();
+    });
+  }
 
   @Test
   public void assignmentWithExpressions() throws Exception {

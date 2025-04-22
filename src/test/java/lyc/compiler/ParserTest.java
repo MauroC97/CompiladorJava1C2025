@@ -31,61 +31,61 @@ public class ParserTest {
     @Test
     void assignments() throws Exception {
         System.out.println("### Assignments test ###");
-        compilationSuccessful(readFromFile("assignments.txt"));
+        compilationSuccessful(readFromResources("assignments.txt"));
     }
 
     @Disabled
     @Test
     void write() throws Exception {
-        compilationSuccessful(readFromFile("write.txt"));
+        compilationSuccessful(readFromResources("write.txt"));
     }
 
     @Disabled
     @Test
     void read() throws Exception {
-        compilationSuccessful(readFromFile("read.txt"));
+        compilationSuccessful(readFromResources("read.txt"));
     }
 
     @Test
     void comment() throws Exception {
         System.out.println("### Comment test ###");
-        compilationSuccessful(readFromFile("comment.txt"));
+        compilationSuccessful(readFromResources("comment.txt"));
     }
 
     @Test
     void init() throws Exception {
         System.out.println("### Init test ###");
-        compilationSuccessful(readFromFile("init.txt"));
+        compilationSuccessful(readFromResources("init.txt"));
     }
 
     @Disabled
     @Test
     void and() throws Exception {
-        compilationSuccessful(readFromFile("and.txt"));
+        compilationSuccessful(readFromResources("and.txt"));
     }
 
     @Disabled
     @Test
     void or() throws Exception {
-        compilationSuccessful(readFromFile("or.txt"));
+        compilationSuccessful(readFromResources("or.txt"));
     }
 
     @Disabled
     @Test
     void not() throws Exception {
-        compilationSuccessful(readFromFile("not.txt"));
+        compilationSuccessful(readFromResources("not.txt"));
     }
 
     @Disabled
     @Test
     void ifStatement() throws Exception {
-        compilationSuccessful(readFromFile("if.txt"));
+        compilationSuccessful(readFromResources("if.txt"));
     }
 
     @Disabled
     @Test
     void whileStatement() throws Exception {
-        compilationSuccessful(readFromFile("while.txt"));
+        compilationSuccessful(readFromResources("while.txt"));
     }
 
     private void compilationSuccessful(String input) throws Exception {

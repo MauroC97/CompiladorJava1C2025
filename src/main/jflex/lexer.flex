@@ -48,7 +48,11 @@ Letter = [a-zA-Z]
 Digit = [0-9]
 
 WhiteSpace = ({LineTerminator} | {Identation})+
-Comment = "#+" ({Letter}|{Digit}|{WhiteSpace})* "+#"
+
+//cualquier caracter menos salto de linea (comments de una linea) o ningun caracter
+CommentCharacters = ([^\r\n])*
+
+Comment = "#+" {CommentCharacters} "+#"
 Identifier = {Letter} ({Letter}|{Digit})*
 
 IntegerConstant = {Digit}+
@@ -78,7 +82,7 @@ Init = "init"
   /* identifiers */
   {Identifier}                             {
       String value = yytext();
-      if (value.length() > 50) {
+      if (value.length() > MAX_LENGTH) {
           throw new InvalidLengthException(yytext());
       }
       return symbol(ParserSym.IDENTIFIER, value);
@@ -88,7 +92,7 @@ Init = "init"
       String value = yytext();
       try {
           float num = Float.parseFloat(value);
-          if (num < -2147483648.0 || num > 2147483647.0) {
+          if (num < MIN_FLOAT || num > MAX_FLOAT) {
               throw new InvalidFloatException(value);
           }
           return symbol(ParserSym.FLOAT_CONSTANT, value);
@@ -100,7 +104,7 @@ Init = "init"
       String value = yytext();
       try {
           int num = Integer.parseInt(value);
-          if (num < -32768 || num > 32767) {
+          if (num < MIN_INT || num > MAX_INT) {
               throw new InvalidIntegerException(value);
           }
           return symbol(ParserSym.INTEGER_CONSTANT, value);
@@ -110,7 +114,7 @@ Init = "init"
   }
   {StringConstant}                         {
       String value = yytext().substring(1, yytext().length() - 1);
-      if (value.length() > 50) {
+      if (value.length() > MAX_LENGTH) {
           throw new InvalidLengthException(yytext());
       }
       return symbol(ParserSym.STRING_CONSTANT, value);
