@@ -44,6 +44,10 @@ OpenBracket = "("
 CloseBracket = ")"
 OpenCurlyBracket = "{"
 CloseCurlyBracket = "}"
+GreaterThan = ">"
+LessThan = "<"
+GreaterThanOrEqual = ">="
+LessThanOrEqual = "<="
 Letter = [a-zA-Z]
 Digit = [0-9]
 
@@ -66,6 +70,13 @@ Int = "Int"
 Float = "Float"
 String = "String"
 Init = "init"
+And = "AND"
+Or = "OR"
+Not = "NOT"
+Read = "read"
+Write = "write"
+If = "if"
+Else = "else"
 %%
 
 
@@ -75,6 +86,13 @@ Init = "init"
   /* los token se reconocen en el orden en el que se escriben aca, primero en la lista tiene mas prioridad */
   /* palabras reservadas */
   {Init}                                   { return symbol(ParserSym.INIT); }
+  {And}                                    { return symbol(ParserSym.AND); }
+  {Or}                                     { return symbol(ParserSym.OR); }
+  {Not}                                    { return symbol(ParserSym.NOT); }
+  {Read}                                   { return symbol(ParserSym.READ); }
+  {Write}                                  { return symbol(ParserSym.WRITE); }
+  {If}                                     { return symbol(ParserSym.IF); }
+  {Else}                                   { return symbol(ParserSym.ELSE); }
   /* tipos de dato */
   {Int}                                   { return symbol(ParserSym.INT); }
   {Float}                                 { return symbol(ParserSym.FLOAT); }
@@ -132,6 +150,10 @@ Init = "init"
   {CloseCurlyBracket}                       { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
   {Colon}                                   { return symbol(ParserSym.COLON); }
   {Comma}                                   { return symbol(ParserSym.COMMA); }
+  {GreaterThan}                             { return symbol(ParserSym.GREATER_THAN); }
+  {LessThan}                                { return symbol(ParserSym.LESS_THAN); }
+  {GreaterThanOrEqual}                      { return symbol(ParserSym.GREATER_THAN_OR_EQUAL); }
+  {LessThanOrEqual}                         { return symbol(ParserSym.LESS_THAN_OR_EQUAL); }
   /* whitespace, comment */
   {WhiteSpace}                   { /* ignore */ }
   {Comment}                      { /* ignore */ }

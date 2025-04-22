@@ -22,9 +22,9 @@ public class ParserTest {
         compilationSuccessful("c:=d*(e-21)/4");
     }
 
-    @Disabled
     @Test
     public void syntaxError() {
+        System.out.println("### Syntax error test ###");
         compilationError("1234");
     }
 
@@ -37,12 +37,14 @@ public class ParserTest {
     @Disabled
     @Test
     void write() throws Exception {
+        System.out.println("### Write test ###");
         compilationSuccessful(readFromResources("write.txt"));
     }
 
     @Disabled
     @Test
     void read() throws Exception {
+        System.out.println("### Read test ###");
         compilationSuccessful(readFromResources("read.txt"));
     }
 
@@ -61,30 +63,35 @@ public class ParserTest {
     @Disabled
     @Test
     void and() throws Exception {
+        System.out.println("### AND test ###");
         compilationSuccessful(readFromResources("and.txt"));
     }
 
     @Disabled
     @Test
     void or() throws Exception {
+        System.out.println("### OR test ###");
         compilationSuccessful(readFromResources("or.txt"));
     }
 
     @Disabled
     @Test
     void not() throws Exception {
+        System.out.println("### NOT test ###");
         compilationSuccessful(readFromResources("not.txt"));
     }
 
     @Disabled
     @Test
     void ifStatement() throws Exception {
+        System.out.println("### If test ###");
         compilationSuccessful(readFromResources("if.txt"));
     }
 
     @Disabled
     @Test
     void whileStatement() throws Exception {
+        System.out.println("### While test ###");
         compilationSuccessful(readFromResources("while.txt"));
     }
 

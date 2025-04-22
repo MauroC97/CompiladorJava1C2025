@@ -19,6 +19,17 @@ terminal FLOAT_CONSTANT;
 terminal STRING_CONSTANT;
 terminal COLON;
 terminal COMMA;
+terminal AND;
+terminal OR;
+terminal NOT;
+terminal READ;
+terminal WRITE;
+terminal IF;
+terminal ELSE;
+terminal GREATER_THAN;
+terminal GREATER_THAN_OR_EQUAL;
+terminal LESS_THAN;
+terminal LESS_THAN_OR_EQUAL;
 
 terminal IDENTIFIER;
 
