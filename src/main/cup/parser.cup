@@ -23,7 +23,6 @@ terminal AND;
 terminal OR;
 terminal NOT;
 terminal READ;
-terminal WRITE;
 terminal IF;
 terminal ELSE;
 terminal GREATER_THAN;
@@ -33,6 +32,7 @@ terminal LESS_THAN_OR_EQUAL;
 
 terminal IDENTIFIER;
 
+terminal WRITE;
 terminal INIT;
 terminal INT;
 terminal STRING;
@@ -49,10 +49,28 @@ non terminal init_sentence;
 non terminal init_line;
 non terminal var_list;
 non terminal var_type;
+non terminal write_sentence;
+non terminal write_line;
+non terminal read_sentence;
+non terminal read_line;
 
 // Start Symbol Definition
 start with sentence;
 
+// Write
+sentence ::= write_sentence {: System.out.println("WRITE"); :};
+sentence ::= write_sentence sentence {: System.out.println("WRITE"); :};
+write_sentence ::= WRITE OPEN_BRACKET write_line CLOSE_BRACKET {: System.out.println("Bloque WRITE"); :};
+write_line ::= IDENTIFIER:id {: System.out.println("Write: " + id); :};
+write_line ::= STRING_CONSTANT:constant {: System.out.println("Write: " + constant); :};
+
+// Read
+sentence ::= read_sentence {: System.out.println("READ"); :};
+sentence ::= read_sentence sentence {: System.out.println("READ"); :};
+read_sentence ::= READ OPEN_BRACKET read_line CLOSE_BRACKET {: System.out.println("Bloque READ"); :};
+read_line ::= IDENTIFIER:id {: System.out.println("Read: " + id); :};
+
+// Assignments and expressions
 sentence ::= assignment {: System.out.println("End"); :};
 sentence ::= assignment sentence {: System.out.println("End"); :};
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
@@ -68,7 +86,7 @@ factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 
-//init
+// Init
 sentence ::= init_sentence {: System.out.println("INIT"); :};
 init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
 init_line ::=  var_list COLON var_type init_line {: System.out.println("Linea declaracion de variables INIT"); :};

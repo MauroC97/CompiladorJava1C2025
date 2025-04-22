@@ -63,7 +63,7 @@ IntegerConstant = {Digit}+
 FloatConstant =  {Digit}+"."{Digit}+ | "."{Digit}+ | {Digit}+"."
 //acepta cualquier cosa que no sea letra o numero. capaz convenga cambiarlo a carateres especificos mas adelante.
 NonAlphanumeric = [^a-zA-Z0-9]
-StringConstant = "\"" ({Letter}*|{Digit}*|{NonAlphanumeric}*)+ "\""
+StringConstant = "\"" ([^\"])* "\""
 
 /* palabras reservadas */
 Int = "Int"
@@ -85,12 +85,12 @@ Else = "else"
 <YYINITIAL> {
   /* los token se reconocen en el orden en el que se escriben aca, primero en la lista tiene mas prioridad */
   /* palabras reservadas */
+  {Write}                                  { return symbol(ParserSym.WRITE); }
   {Init}                                   { return symbol(ParserSym.INIT); }
   {And}                                    { return symbol(ParserSym.AND); }
   {Or}                                     { return symbol(ParserSym.OR); }
   {Not}                                    { return symbol(ParserSym.NOT); }
   {Read}                                   { return symbol(ParserSym.READ); }
-  {Write}                                  { return symbol(ParserSym.WRITE); }
   {If}                                     { return symbol(ParserSym.IF); }
   {Else}                                   { return symbol(ParserSym.ELSE); }
   /* tipos de dato */

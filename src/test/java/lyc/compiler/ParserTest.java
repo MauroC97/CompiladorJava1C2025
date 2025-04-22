@@ -34,14 +34,12 @@ public class ParserTest {
         compilationSuccessful(readFromResources("assignments.txt"));
     }
 
-    @Disabled
     @Test
     void write() throws Exception {
         System.out.println("### Write test ###");
         compilationSuccessful(readFromResources("write.txt"));
     }
 
-    @Disabled
     @Test
     void read() throws Exception {
         System.out.println("### Read test ###");
