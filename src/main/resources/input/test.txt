@@ -6,3 +6,17 @@ init {
 
 a1:=999.9
 a2:= "hola mundo"
+
+while (a > b)
+{
+    while (a > b)
+    {
+        while (a > b)
+        {
+            if (a < b){
+            write("ojala que funcione")
+            a:= "hola"
+            }
+        }
+    }
+}

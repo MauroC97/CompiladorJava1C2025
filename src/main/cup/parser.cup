@@ -82,14 +82,12 @@ block ::= sentence;
 
 // Write
 sentence ::= write_sentence {: System.out.println("WRITE"); :};
-sentence ::= write_sentence sentence {: System.out.println("WRITE"); :};
 write_sentence ::= WRITE OPEN_BRACKET write_line CLOSE_BRACKET {: System.out.println("Bloque WRITE"); :};
 write_line ::= IDENTIFIER:id {: System.out.println("Write: " + id); :};
 write_line ::= STRING_CONSTANT:constant {: System.out.println("Write: " + constant); :};
 
 // Read
 sentence ::= read_sentence {: System.out.println("READ"); :};
-sentence ::= read_sentence sentence {: System.out.println("READ"); :};
 read_sentence ::= READ OPEN_BRACKET read_line CLOSE_BRACKET {: System.out.println("Bloque READ"); :};
 read_line ::= IDENTIFIER:id {: System.out.println("Read: " + id); :};
 
@@ -126,14 +124,14 @@ condition_sentence ::= expression {: System.out.println("Condition"); :};
 
 // If/else condition
 sentence ::= if_sentence {: System.out.println("IF"); :};
-if_sentence ::= IF OPEN_BRACKET condition_sentence CLOSE_BRACKET OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET {: System.out.println("If sentence"); :};
-if_sentence ::= IF OPEN_BRACKET condition_sentence CLOSE_BRACKET OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET else_sentence {: System.out.println("If with else sentence"); :};
-else_sentence ::= ELSE OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET {: System.out.println("Else sentence"); :};
+if_sentence ::= IF OPEN_BRACKET condition_sentence CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {: System.out.println("If sentence"); :};
+if_sentence ::= IF OPEN_BRACKET condition_sentence CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET else_sentence {: System.out.println("If with else sentence"); :};
+else_sentence ::= ELSE OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {: System.out.println("Else sentence"); :};
 
 // While
 sentence ::= while_sentence {: System.out.println("While"); :};
 while_sentence ::= WHILE OPEN_BRACKET condition_sentence CLOSE_BRACKET while_line {: System.out.println("While sentence"); :};
-while_line ::= OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET {: System.out.println("While line"); :};
+while_line ::= OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {: System.out.println("While line"); :};
 
 // Expressions
 expression ::= expression PLUS term {: System.out.println("+"); :};
