@@ -1,8 +1,17 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
+import lyc.compiler.symboltable.*;
 
 class Parser;
+
+action code {:
+
+public void insert_sym(String name, String type, String value, boolean isID){
+    SymbolTable tb = SymbolTable.getSymbolTable();
+    tb.insert(name,type,value,isID);
+    }
+:};
 
 // Terminals
 terminal ASSIG;
@@ -40,6 +49,8 @@ terminal STRING;
 terminal FLOAT;
 
 // Non Terminals
+non terminal program;
+non terminal block;
 non terminal sentence;
 non terminal assignment;
 non terminal expression;
@@ -61,7 +72,13 @@ non terminal while_line;
 non terminal condition_sentence;
 
 // Start Symbol Definition
-start with sentence;
+start with program;
+
+program ::= block;
+
+//agrupo sentencias en bloques y aplico recursividad para soportar multiples lineas.
+block ::= block sentence;
+block ::= sentence;
 
 // Write
 sentence ::= write_sentence {: System.out.println("WRITE"); :};
@@ -78,17 +95,25 @@ read_line ::= IDENTIFIER:id {: System.out.println("Read: " + id); :};
 
 // Assignments
 sentence ::= assignment {: System.out.println("End"); :};
-sentence ::= assignment sentence {: System.out.println("End"); :};
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
-assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {: System.out.println("Assignment: "+ constant); :};
+assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {:
+    System.out.println("Assignment: "+ constant);
+    String c = constant.toString();
+    insert_sym(c,"STRING",c,false);:};
 
 // Init
 sentence ::= init_sentence {: System.out.println("INIT"); :};
 init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
 init_line ::=  var_list COLON var_type init_line {: System.out.println("Linea declaracion de variables INIT"); :};
 init_line ::=  var_list COLON var_type {: System.out.println("Ultima Linea declaracion de variables INIT"); :};
-var_list ::= IDENTIFIER: id COMMA var_list {: System.out.println("Variable: "+id); :};
-var_list ::= IDENTIFIER: id {: System.out.println("Variable: "+id); :};
+var_list ::= IDENTIFIER: id COMMA var_list {:
+    insert_sym(id.toString(),"","",true);//por ahora solo guardo el nombre
+    System.out.println("Variable: "+id);
+:};
+var_list ::= IDENTIFIER: id {:
+    insert_sym(id.toString(),"","",true);
+    System.out.println("Variable: "+id);
+:};
 var_type ::= STRING {: System.out.println("STRING"); :};
 var_type ::= INT {: System.out.println("INT"); :};
 var_type ::= FLOAT {: System.out.println("FLOAT"); :};
@@ -122,7 +147,14 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 
+factor ::= FLOAT_CONSTANT:constant {:
+    System.out.println("FLOAT Constant: " + constant );
+    insert_sym(constant.toString(),"FLOAT",constant.toString(),false);
+:};
+factor ::= INTEGER_CONSTANT:constant {:
+    System.out.println("INT Constant: " + constant );
+    insert_sym(constant.toString(),"INT",constant.toString(),false);
+:};
+
+factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
