@@ -44,6 +44,10 @@ OpenBracket = "("
 CloseBracket = ")"
 OpenCurlyBracket = "{"
 CloseCurlyBracket = "}"
+GreaterThan = ">"
+LessThan = "<"
+GreaterThanOrEqual = ">="
+LessThanOrEqual = "<="
 Letter = [a-zA-Z]
 Digit = [0-9]
 
@@ -59,13 +63,21 @@ IntegerConstant = {Digit}+
 FloatConstant =  {Digit}+"."{Digit}+ | "."{Digit}+ | {Digit}+"."
 //acepta cualquier cosa que no sea letra o numero. capaz convenga cambiarlo a carateres especificos mas adelante.
 NonAlphanumeric = [^a-zA-Z0-9]
-StringConstant = "\"" ({Letter}*|{Digit}*|{NonAlphanumeric}*)+ "\""
+StringConstant = "\"" ([^\"])* "\""
 
 /* palabras reservadas */
 Int = "Int"
 Float = "Float"
 String = "String"
 Init = "init"
+And = "AND"
+Or = "OR"
+Not = "NOT"
+Read = "read"
+Write = "write"
+If = "if"
+Else = "else"
+While = "while"
 %%
 
 
@@ -74,7 +86,15 @@ Init = "init"
 <YYINITIAL> {
   /* los token se reconocen en el orden en el que se escriben aca, primero en la lista tiene mas prioridad */
   /* palabras reservadas */
+  {Write}                                  { return symbol(ParserSym.WRITE); }
   {Init}                                   { return symbol(ParserSym.INIT); }
+  {And}                                    { return symbol(ParserSym.AND); }
+  {Or}                                     { return symbol(ParserSym.OR); }
+  {Not}                                    { return symbol(ParserSym.NOT); }
+  {Read}                                   { return symbol(ParserSym.READ); }
+  {If}                                     { return symbol(ParserSym.IF); }
+  {Else}                                   { return symbol(ParserSym.ELSE); }
+  {While}                                  { return symbol(ParserSym.WHILE); }
   /* tipos de dato */
   {Int}                                   { return symbol(ParserSym.INT); }
   {Float}                                 { return symbol(ParserSym.FLOAT); }
@@ -132,6 +152,10 @@ Init = "init"
   {CloseCurlyBracket}                       { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
   {Colon}                                   { return symbol(ParserSym.COLON); }
   {Comma}                                   { return symbol(ParserSym.COMMA); }
+  {GreaterThan}                             { return symbol(ParserSym.GREATER_THAN); }
+  {LessThan}                                { return symbol(ParserSym.LESS_THAN); }
+  {GreaterThanOrEqual}                      { return symbol(ParserSym.GREATER_THAN_OR_EQUAL); }
+  {LessThanOrEqual}                         { return symbol(ParserSym.LESS_THAN_OR_EQUAL); }
   /* whitespace, comment */
   {WhiteSpace}                   { /* ignore */ }
   {Comment}                      { /* ignore */ }

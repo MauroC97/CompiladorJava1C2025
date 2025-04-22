@@ -28,9 +28,21 @@ terminal FLOAT_CONSTANT;
 terminal STRING_CONSTANT;
 terminal COLON;
 terminal COMMA;
+terminal AND;
+terminal OR;
+terminal NOT;
+terminal READ;
+terminal IF;
+terminal ELSE;
+terminal GREATER_THAN;
+terminal GREATER_THAN_OR_EQUAL;
+terminal LESS_THAN;
+terminal LESS_THAN_OR_EQUAL;
 
 terminal IDENTIFIER;
 
+terminal WHILE;
+terminal WRITE;
 terminal INIT;
 terminal INT;
 terminal STRING;
@@ -49,6 +61,15 @@ non terminal init_sentence;
 non terminal init_line;
 non terminal var_list;
 non terminal var_type;
+non terminal write_sentence;
+non terminal write_line;
+non terminal read_sentence;
+non terminal read_line;
+non terminal if_sentence;
+non terminal else_sentence;
+non terminal while_sentence;
+non terminal while_line;
+non terminal condition_sentence;
 
 // Start Symbol Definition
 start with program;
@@ -59,14 +80,68 @@ program ::= block;
 block ::= block sentence;
 block ::= sentence;
 
+// Write
+sentence ::= write_sentence {: System.out.println("WRITE"); :};
+sentence ::= write_sentence sentence {: System.out.println("WRITE"); :};
+write_sentence ::= WRITE OPEN_BRACKET write_line CLOSE_BRACKET {: System.out.println("Bloque WRITE"); :};
+write_line ::= IDENTIFIER:id {: System.out.println("Write: " + id); :};
+write_line ::= STRING_CONSTANT:constant {: System.out.println("Write: " + constant); :};
+
+// Read
+sentence ::= read_sentence {: System.out.println("READ"); :};
+sentence ::= read_sentence sentence {: System.out.println("READ"); :};
+read_sentence ::= READ OPEN_BRACKET read_line CLOSE_BRACKET {: System.out.println("Bloque READ"); :};
+read_line ::= IDENTIFIER:id {: System.out.println("Read: " + id); :};
+
+// Assignments
 sentence ::= assignment {: System.out.println("End"); :};
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
 assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {:
     System.out.println("Assignment: "+ constant);
     String c = constant.toString();
     insert_sym(c,"STRING",c,false);:};
+
+// Init
+sentence ::= init_sentence {: System.out.println("INIT"); :};
+init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
+init_line ::=  var_list COLON var_type init_line {: System.out.println("Linea declaracion de variables INIT"); :};
+init_line ::=  var_list COLON var_type {: System.out.println("Ultima Linea declaracion de variables INIT"); :};
+var_list ::= IDENTIFIER: id COMMA var_list {:
+    insert_sym(id.toString(),"","",true);//por ahora solo guardo el nombre
+    System.out.println("Variable: "+id);
+:};
+var_list ::= IDENTIFIER: id {:
+    insert_sym(id.toString(),"","",true);
+    System.out.println("Variable: "+id);
+:};
+var_type ::= STRING {: System.out.println("STRING"); :};
+var_type ::= INT {: System.out.println("INT"); :};
+var_type ::= FLOAT {: System.out.println("FLOAT"); :};
+
+// Conditions
+condition_sentence ::= expression AND expression {: System.out.println("AND"); :};
+condition_sentence ::= expression OR expression {: System.out.println("OR"); :};
+condition_sentence ::= NOT expression {: System.out.println("NOT"); :};
+condition_sentence ::= expression {: System.out.println("Condition"); :};
+
+// If/else condition
+sentence ::= if_sentence {: System.out.println("IF"); :};
+if_sentence ::= IF OPEN_BRACKET condition_sentence CLOSE_BRACKET OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET {: System.out.println("If sentence"); :};
+if_sentence ::= IF OPEN_BRACKET condition_sentence CLOSE_BRACKET OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET else_sentence {: System.out.println("If with else sentence"); :};
+else_sentence ::= ELSE OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET {: System.out.println("Else sentence"); :};
+
+// While
+sentence ::= while_sentence {: System.out.println("While"); :};
+while_sentence ::= WHILE OPEN_BRACKET condition_sentence CLOSE_BRACKET while_line {: System.out.println("While sentence"); :};
+while_line ::= OPEN_CURLY_BRACKET sentence CLOSE_CURLY_BRACKET {: System.out.println("While line"); :};
+
+// Expressions
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
+expression ::= expression GREATER_THAN term {: System.out.println("AND"); :};
+expression ::= expression GREATER_THAN_OR_EQUAL term {: System.out.println("OR"); :};
+expression ::= expression LESS_THAN term {: System.out.println("AND"); :};
+expression ::= expression LESS_THAN_OR_EQUAL term {: System.out.println("OR"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
@@ -83,20 +158,3 @@ factor ::= INTEGER_CONSTANT:constant {:
 :};
 
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
-
-//init
-sentence ::= init_sentence {: System.out.println("INIT"); :};
-init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
-init_line ::=  var_list COLON var_type init_line {: System.out.println("Linea declaracion de variables INIT"); :};
-init_line ::=  var_list COLON var_type {: System.out.println("Ultima Linea declaracion de variables INIT"); :};
-var_list ::= IDENTIFIER: id COMMA var_list {:
-    insert_sym(id.toString(),"","",true);//por ahora solo guardo el nombre
-    System.out.println("Variable: "+id);
-:};
-var_list ::= IDENTIFIER: id {:
-    insert_sym(id.toString(),"","",true);
-    System.out.println("Variable: "+id);
-:};
-var_type ::= STRING {: System.out.println("STRING"); :};
-var_type ::= INT {: System.out.println("INT"); :};
-var_type ::= FLOAT {: System.out.println("FLOAT"); :};
