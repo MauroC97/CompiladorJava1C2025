@@ -77,6 +77,7 @@ Read = "read"
 Write = "write"
 If = "if"
 Else = "else"
+While = "while"
 %%
 
 
@@ -93,6 +94,7 @@ Else = "else"
   {Read}                                   { return symbol(ParserSym.READ); }
   {If}                                     { return symbol(ParserSym.IF); }
   {Else}                                   { return symbol(ParserSym.ELSE); }
+  {While}                                  { return symbol(ParserSym.WHILE); }
   /* tipos de dato */
   {Int}                                   { return symbol(ParserSym.INT); }
   {Float}                                 { return symbol(ParserSym.FLOAT); }

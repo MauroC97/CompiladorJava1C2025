@@ -58,35 +58,30 @@ public class ParserTest {
         compilationSuccessful(readFromResources("init.txt"));
     }
 
-    @Disabled
     @Test
     void and() throws Exception {
         System.out.println("### AND test ###");
         compilationSuccessful(readFromResources("and.txt"));
     }
 
-    @Disabled
     @Test
     void or() throws Exception {
         System.out.println("### OR test ###");
         compilationSuccessful(readFromResources("or.txt"));
     }
 
-    @Disabled
     @Test
     void not() throws Exception {
         System.out.println("### NOT test ###");
         compilationSuccessful(readFromResources("not.txt"));
     }
 
-    @Disabled
     @Test
     void ifStatement() throws Exception {
         System.out.println("### If test ###");
         compilationSuccessful(readFromResources("if.txt"));
     }
 
-    @Disabled
     @Test
     void whileStatement() throws Exception {
         System.out.println("### While test ###");
