@@ -47,12 +47,12 @@ CloseCurlyBracket = "}"
 Letter = [a-zA-Z]
 Digit = [0-9]
 
-WhiteSpace = {LineTerminator} | {Identation}
+WhiteSpace = ({LineTerminator} | {Identation})+
 Comment = "#+" ({Letter}|{Digit}|{WhiteSpace})* "+#"
 Identifier = {Letter} ({Letter}|{Digit})*
 
 IntegerConstant = {Digit}+
-FloatConstant =  {Digit}+"."{Digit}+
+FloatConstant =  {Digit}+"."{Digit}+ | "."{Digit}+ | {Digit}+"."
 //acepta cualquier cosa que no sea letra o numero. capaz convenga cambiarlo a carateres especificos mas adelante.
 NonAlphanumeric = [^a-zA-Z0-9]
 StringConstant = "\"" ({Letter}*|{Digit}*|{NonAlphanumeric}*)+ "\""
@@ -69,7 +69,6 @@ Init = "init"
 
 <YYINITIAL> {
   /* los token se reconocen en el orden en el que se escriben aca, primero en la lista tiene mas prioridad */
-
   /* palabras reservadas */
   {Init}                                   { return symbol(ParserSym.INIT); }
   /* tipos de dato */
@@ -77,11 +76,45 @@ Init = "init"
   {Float}                                 { return symbol(ParserSym.FLOAT); }
   {String}                                { return symbol(ParserSym.STRING); }
   /* identifiers */
-  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
+  {Identifier}                             {
+      String value = yytext();
+      if (value.length() > 50) {
+          throw new InvalidLengthException(yytext());
+      }
+      return symbol(ParserSym.IDENTIFIER, value);
+  }
   /* Constants */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-  {FloatConstant}                          { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
-  {StringConstant}                         { return symbol(ParserSym.STRING_CONSTANT, yytext()); }
+  {FloatConstant}                          {
+      String value = yytext();
+      try {
+          float num = Float.parseFloat(value);
+          if (num < -2147483648.0 || num > 2147483647.0) {
+              throw new InvalidFloatException(value);
+          }
+          return symbol(ParserSym.FLOAT_CONSTANT, value);
+      } catch (NumberFormatException e) {
+          throw new InvalidFloatException(value);
+      }
+  }
+  {IntegerConstant}                        {
+      String value = yytext();
+      try {
+          int num = Integer.parseInt(value);
+          if (num < -32768 || num > 32767) {
+              throw new InvalidIntegerException(value);
+          }
+          return symbol(ParserSym.INTEGER_CONSTANT, value);
+      } catch (NumberFormatException e) {
+          throw new InvalidIntegerException(value);
+      }
+  }
+  {StringConstant}                         {
+      String value = yytext().substring(1, yytext().length() - 1);
+      if (value.length() > 50) {
+          throw new InvalidLengthException(yytext());
+      }
+      return symbol(ParserSym.STRING_CONSTANT, value);
+  }
 
   /* operators */
   {Plus}                                    { return symbol(ParserSym.PLUS); }

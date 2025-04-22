@@ -15,7 +15,6 @@ import static com.google.common.truth.Truth.assertThat;
 import static lyc.compiler.Constants.EXAMPLES_ROOT_DIRECTORY;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//@Disabled
 public class ParserTest {
 
     @Test
@@ -23,14 +22,15 @@ public class ParserTest {
         compilationSuccessful("c:=d*(e-21)/4");
     }
 
+    @Disabled
     @Test
     public void syntaxError() {
         compilationError("1234");
     }
 
-    @Disabled
     @Test
     void assignments() throws Exception {
+        System.out.println("### Assignments test ###");
         compilationSuccessful(readFromFile("assignments.txt"));
     }
 
@@ -46,14 +46,15 @@ public class ParserTest {
         compilationSuccessful(readFromFile("read.txt"));
     }
 
-    @Disabled
     @Test
     void comment() throws Exception {
+        System.out.println("### Comment test ###");
         compilationSuccessful(readFromFile("comment.txt"));
     }
 
     @Test
     void init() throws Exception {
+        System.out.println("### Init test ###");
         compilationSuccessful(readFromFile("init.txt"));
     }
 
@@ -87,24 +88,29 @@ public class ParserTest {
         compilationSuccessful(readFromFile("while.txt"));
     }
 
-
     private void compilationSuccessful(String input) throws Exception {
         assertThat(scan(input).sym).isEqualTo(ParserSym.EOF);
     }
 
-    private void compilationError(String input){
+    private void compilationError(String input) {
         assertThrows(Exception.class, () -> scan(input));
     }
 
     private Symbol scan(String input) throws Exception {
+        System.out.println(input);
         return ParserFactory.create(input).parse();
     }
 
     private String readFromFile(String fileName) throws IOException {
         URL url = new URL(EXAMPLES_ROOT_DIRECTORY + "/%s".formatted(fileName));
+        System.out.println("Reading from file: " + url);
         assertThat(url).isNotNull();
         return IOUtils.toString(url.openStream(), StandardCharsets.UTF_8);
     }
 
-
+    private String readFromResources(String filename) throws IOException {
+        InputStream inputStream = getClass().getResourceAsStream("/%s".formatted(filename));
+        assertThat(inputStream).isNotNull();
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+    }
 }

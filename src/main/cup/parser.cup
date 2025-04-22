@@ -4,7 +4,6 @@ import java_cup.runtime.*;
 
 class Parser;
 
-
 // Terminals
 terminal ASSIG;
 terminal PLUS;
@@ -45,7 +44,7 @@ start with sentence;
 
 sentence ::= assignment {: System.out.println("End"); :};
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
-assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {: System.out.println("Assignment: "+constant); :};
+assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {: System.out.println("Assignment: "+ constant); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
@@ -53,8 +52,8 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 
 //init
@@ -67,3 +66,6 @@ var_list ::= IDENTIFIER: id {: System.out.println("Variable: "+id); :};
 var_type ::= STRING {: System.out.println("STRING"); :};
 var_type ::= INT {: System.out.println("INT"); :};
 var_type ::= FLOAT {: System.out.println("FLOAT"); :};
+
+//comment or empty
+sentence ::= {: System.out.println("Empty"); :};
