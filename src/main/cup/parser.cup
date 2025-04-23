@@ -2,15 +2,14 @@ package lyc.compiler;
 
 import java_cup.runtime.*;
 import lyc.compiler.symboltable.*;
-
+import java.util.ArrayList;
+import lyc.compiler.model.*;
 class Parser;
 
 action code {:
+public ArrayList<String> var = new ArrayList<>();
+SymbolTable sym = SymbolTable.getSymbolTable();
 
-public void insert_sym(String name, String type, String value, boolean isID){
-    SymbolTable tb = SymbolTable.getSymbolTable();
-    tb.insert(name,type,value,isID);
-    }
 :};
 
 // Terminals
@@ -84,8 +83,11 @@ block ::= sentence;
 sentence ::= write_sentence {: System.out.println("WRITE"); :};
 write_sentence ::= WRITE OPEN_BRACKET write_line CLOSE_BRACKET {: System.out.println("Bloque WRITE"); :};
 write_line ::= IDENTIFIER:id {: System.out.println("Write: " + id); :};
-write_line ::= STRING_CONSTANT:constant {: System.out.println("Write: " + constant); :};
-
+write_line ::= STRING_CONSTANT:constant {:
+    System.out.println("Write: " + constant);
+    String c = constant.toString();
+    sym.insert(c,"STRING",c,false);
+    :};
 // Read
 sentence ::= read_sentence {: System.out.println("READ"); :};
 read_sentence ::= READ OPEN_BRACKET read_line CLOSE_BRACKET {: System.out.println("Bloque READ"); :};
@@ -97,7 +99,7 @@ assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); 
 assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {:
     System.out.println("Assignment: "+ constant);
     String c = constant.toString();
-    insert_sym(c,"STRING",c,false);:};
+    sym.insert(c,"STRING",c,false);:};
 
 // Init
 sentence ::= init_sentence {: System.out.println("INIT"); :};
@@ -105,16 +107,40 @@ init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: Syste
 init_line ::=  var_list COLON var_type init_line {: System.out.println("Linea declaracion de variables INIT"); :};
 init_line ::=  var_list COLON var_type {: System.out.println("Ultima Linea declaracion de variables INIT"); :};
 var_list ::= IDENTIFIER: id COMMA var_list {:
-    insert_sym(id.toString(),"","",true);//por ahora solo guardo el nombre
+    var.add(id.toString());
     System.out.println("Variable: "+id);
 :};
 var_list ::= IDENTIFIER: id {:
-    insert_sym(id.toString(),"","",true);
+    var.add(id.toString());
     System.out.println("Variable: "+id);
 :};
-var_type ::= STRING {: System.out.println("STRING"); :};
-var_type ::= INT {: System.out.println("INT"); :};
-var_type ::= FLOAT {: System.out.println("FLOAT"); :};
+var_type ::= STRING {: System.out.println("STRING");
+    for (String v: var){
+        if(sym.exists(v)){
+            throw new VariableAlreadyDeclaredException("La variable \""+v+"\" Ya fue declarada.");
+        }
+        sym.insert(v,"STRING","",true);
+    }
+    var.clear();
+:};
+var_type ::= INT {: System.out.println("INT");
+    for (String v: var){
+        if(sym.exists(v)){
+            throw new VariableAlreadyDeclaredException("La variable \""+v+"\" Ya fue declarada.");
+        }
+        sym.insert(v,"INT","",true);
+    }
+    var.clear();
+:};
+var_type ::= FLOAT {: System.out.println("FLOAT");
+    for (String v: var){
+        if(sym.exists(v)){
+            throw new VariableAlreadyDeclaredException("La variable \""+v+"\" Ya fue declarada.");
+        }
+        sym.insert(v,"FLOAT","",true);
+    }
+    var.clear();
+:};
 
 // Conditions
 condition_sentence ::= expression AND expression {: System.out.println("AND"); :};
@@ -148,11 +174,11 @@ factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
 
 factor ::= FLOAT_CONSTANT:constant {:
     System.out.println("FLOAT Constant: " + constant );
-    insert_sym(constant.toString(),"FLOAT",constant.toString(),false);
+    sym.insert(constant.toString(),"FLOAT",constant.toString(),false);
 :};
 factor ::= INTEGER_CONSTANT:constant {:
     System.out.println("INT Constant: " + constant );
-    insert_sym(constant.toString(),"INT",constant.toString(),false);
+    sym.insert(constant.toString(),"INT",constant.toString(),false);
 :};
 
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
