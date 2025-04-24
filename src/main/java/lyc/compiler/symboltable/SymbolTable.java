@@ -35,13 +35,17 @@ public final class SymbolTable {
 
     @Override
     public String toString() {
-        String format = "%-50s│%-10s│%-50s│%-10s";
-        String out = String.format(format,"NAME","TYPE","VALUE","LENGTH") +"\n";
-        out += "─".repeat(50)+"┼"+"─".repeat(10)+"┼"+"─".repeat(50)+"┼"+"─".repeat(10)+"\n";
-        format = "%-50s│%s";
+        //literalmente una tabla
+        String inicio = "┌"+"─".repeat(50)+"┬"+"─".repeat(10)+"┬"+"─".repeat(50)+"┬"+"─".repeat(10)+"┐"+"\n";
+        String format = "│%-50s│%-10s│%-50s│%-10s│";
+        String out = inicio + String.format(format,"NAME","TYPE","VALUE","LENGTH") +"\n";
+        String separador = "├"+"─".repeat(50)+"┼"+"─".repeat(10)+"┼"+"─".repeat(50)+"┼"+"─".repeat(10)+"┤"+"\n";
+        String fin = "└"+"─".repeat(50)+"┴"+"─".repeat(10)+"┴"+"─".repeat(50)+"┴"+"─".repeat(10)+"┘"+"\n";
+        out += separador;
+        format = "│%-50s│%s│";
         for(String k : table.keySet() ){
-            out += String.format(format,k,table.get(k)) + "\n";
+            out += String.format(format,k,table.get(k)) + "\n" + separador;
         }
-        return out;
+        return out.substring(0,out.length()-separador.length())+fin;
     }
 }

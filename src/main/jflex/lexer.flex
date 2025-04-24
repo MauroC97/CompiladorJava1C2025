@@ -48,6 +48,9 @@ GreaterThan = ">"
 LessThan = "<"
 GreaterThanOrEqual = ">="
 LessThanOrEqual = "<="
+Equal = "=="
+NotEqual = "!="
+
 Letter = [a-zA-Z]
 Digit = [0-9]
 
@@ -61,8 +64,8 @@ Identifier = {Letter} ({Letter}|{Digit})*
 
 IntegerConstant = {Digit}+
 FloatConstant =  {Digit}+"."{Digit}+ | "."{Digit}+ | {Digit}+"."
-//acepta cualquier cosa que no sea letra o numero. capaz convenga cambiarlo a carateres especificos mas adelante.
-NonAlphanumeric = [^a-zA-Z0-9]
+
+//capaz convenga cambiarlo a carateres especificos mas adelante.
 StringConstant = "\"" ([^\"])* "\""
 
 /* palabras reservadas */
@@ -107,7 +110,7 @@ SliceAndConcat = "sliceAndConcat"
   {Identifier}                             {
       String value = yytext();
       if (value.length() > MAX_LENGTH) {
-          throw new InvalidLengthException(yytext());
+          throw new InvalidLengthException("La longitud del ID "+value +" supera lo permitido.");
       }
       return symbol(ParserSym.IDENTIFIER, value);
   }
@@ -117,11 +120,11 @@ SliceAndConcat = "sliceAndConcat"
       try {
           float num = Float.parseFloat(value);
           if (num < MIN_FLOAT || num > MAX_FLOAT) {
-              throw new InvalidFloatException(value);
+              throw new InvalidFloatException("El valor FLOAT "+value +" supera lo permitido.");
           }
           return symbol(ParserSym.FLOAT_CONSTANT, value);
       } catch (NumberFormatException e) {
-          throw new InvalidFloatException(value);
+          throw new InvalidFloatException("El valor FLOAT "+value +" es invalido.");
       }
   }
   {IntegerConstant}                        {
@@ -129,17 +132,17 @@ SliceAndConcat = "sliceAndConcat"
       try {
           int num = Integer.parseInt(value);
           if (num < MIN_INT || num > MAX_INT) {
-              throw new InvalidIntegerException(value);
+              throw new InvalidIntegerException("El valor INT "+value +" supera lo permitido.");
           }
           return symbol(ParserSym.INTEGER_CONSTANT, value);
       } catch (NumberFormatException e) {
-          throw new InvalidIntegerException(value);
+          throw new InvalidIntegerException("El valor INT "+value +" es invalido.");
       }
   }
   {StringConstant}                         {
       String value = yytext().substring(1, yytext().length() - 1);
       if (value.length() > MAX_LENGTH) {
-          throw new InvalidLengthException(yytext());
+          throw new InvalidLengthException("La longitud del STRING "+value +" supera lo permitido.");
       }
       return symbol(ParserSym.STRING_CONSTANT, value);
   }
@@ -160,6 +163,8 @@ SliceAndConcat = "sliceAndConcat"
   {LessThan}                                { return symbol(ParserSym.LESS_THAN); }
   {GreaterThanOrEqual}                      { return symbol(ParserSym.GREATER_THAN_OR_EQUAL); }
   {LessThanOrEqual}                         { return symbol(ParserSym.LESS_THAN_OR_EQUAL); }
+  {Equal}                                   { return symbol(ParserSym.EQUAL); }
+  {NotEqual}                                { return symbol(ParserSym.NOT_EQUAL); }
   /* whitespace, comment */
   {WhiteSpace}                   { /* ignore */ }
   {Comment}                      { /* ignore */ }

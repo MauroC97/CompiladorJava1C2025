@@ -37,6 +37,8 @@ terminal GREATER_THAN;
 terminal GREATER_THAN_OR_EQUAL;
 terminal LESS_THAN;
 terminal LESS_THAN_OR_EQUAL;
+terminal EQUAL;
+terminal NOT_EQUAL;
 
 terminal IDENTIFIER;
 
@@ -94,6 +96,7 @@ write_line ::= STRING_CONSTANT:constant {:
     sym.insert(c,"STRING",c,false);
     :};
 write_line ::= sliceAndConcat_sentence {: System.out.println("Write: sliceAndConcat"); :};
+
 
 // Read
 sentence ::= read_sentence {: System.out.println("READ"); :};
@@ -180,10 +183,12 @@ sliceAndConcat_sentence ::= SLICE_AND_CONCAT OPEN_BRACKET INTEGER_CONSTANT COMMA
 // Expressions
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
-expression ::= expression GREATER_THAN term {: System.out.println("AND"); :};
-expression ::= expression GREATER_THAN_OR_EQUAL term {: System.out.println("OR"); :};
-expression ::= expression LESS_THAN term {: System.out.println("AND"); :};
-expression ::= expression LESS_THAN_OR_EQUAL term {: System.out.println("OR"); :};
+expression ::= expression GREATER_THAN term {: System.out.println(">"); :};
+expression ::= expression GREATER_THAN_OR_EQUAL term {: System.out.println(">="); :};
+expression ::= expression LESS_THAN term {: System.out.println("<"); :};
+expression ::= expression LESS_THAN_OR_EQUAL term {: System.out.println("<="); :};
+expression ::= expression NOT_EQUAL term {: System.out.println("!="); :};
+expression ::= expression EQUAL term {: System.out.println("=="); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
