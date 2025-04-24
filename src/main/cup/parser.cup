@@ -93,19 +93,24 @@ write_line ::= STRING_CONSTANT:constant {:
     String c = constant.toString();
     sym.insert(c,"STRING",c,false);
     :};
+write_line ::= sliceAndConcat_sentence {: System.out.println("Write: sliceAndConcat"); :};
+
 // Read
 sentence ::= read_sentence {: System.out.println("READ"); :};
 read_sentence ::= READ OPEN_BRACKET read_line CLOSE_BRACKET {: System.out.println("Bloque READ"); :};
 read_line ::= IDENTIFIER:id {: System.out.println("Read: " + id); :};
 
+
 // Assignments
 sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
-assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {:
-    System.out.println("Assignment: "+ constant);
+assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Assignment "+id+":= expression"); :};
+assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
+    System.out.println("Assignment: "+id+":="+ constant);
     String c = constant.toString();
     sym.insert(c,"STRING",c,false);:};
-
+assignment ::= IDENTIFIER:id ASSIG sliceAndConcat_sentence {:
+    System.out.println("Assignment "+id+":= sliceAndConcat");
+:};
 // Init
 sentence ::= init_sentence {: System.out.println("INIT"); :};
 init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
@@ -196,10 +201,8 @@ factor ::= INTEGER_CONSTANT:constant {:
 
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 
-factor ::= SUM_FIRST_PRIMES OPEN_BRACKET INTEGER_CONSTANT CLOSE_BRACKET {:
+factor ::= sumFirstPrimes_sentence {:
     System.out.println("factor = sumFirstPrimes(INTEGER_CONSTANT)");
 :};
 
-factor ::= SLICE_AND_CONCAT OPEN_BRACKET INTEGER_CONSTANT COMMA INTEGER_CONSTANT COMMA STRING_CONSTANT COMMA STRING_CONSTANT COMMA INTEGER_CONSTANT CLOSE_BRACKET {:
-    System.out.println("factor = sliceAndConcat(INTEGER_CONSTANT,INTEGER_CONSTANT,STRING_CONSTANT,STRING_CONSTANT,INTEGER_CONSTANT)");
-:};
+
