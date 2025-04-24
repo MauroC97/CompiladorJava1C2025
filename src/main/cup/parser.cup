@@ -47,6 +47,9 @@ terminal INT;
 terminal STRING;
 terminal FLOAT;
 
+terminal SUM_FIRST_PRIMES;
+terminal SLICE_AND_CONCAT;
+
 // Non Terminals
 non terminal program;
 non terminal block;
@@ -69,6 +72,8 @@ non terminal else_sentence;
 non terminal while_sentence;
 non terminal while_line;
 non terminal condition_sentence;
+non terminal sumFirstPrimes_sentence;
+non terminal sliceAndConcat_sentence;
 
 // Start Symbol Definition
 start with program;
@@ -88,19 +93,24 @@ write_line ::= STRING_CONSTANT:constant {:
     String c = constant.toString();
     sym.insert(c,"STRING",c,false);
     :};
+write_line ::= sliceAndConcat_sentence {: System.out.println("Write: sliceAndConcat"); :};
+
 // Read
 sentence ::= read_sentence {: System.out.println("READ"); :};
 read_sentence ::= READ OPEN_BRACKET read_line CLOSE_BRACKET {: System.out.println("Bloque READ"); :};
 read_line ::= IDENTIFIER:id {: System.out.println("Read: " + id); :};
 
+
 // Assignments
 sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
-assignment ::= IDENTIFIER ASSIG STRING_CONSTANT:constant {:
-    System.out.println("Assignment: "+ constant);
+assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Assignment "+id+":= expression"); :};
+assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
+    System.out.println("Assignment: "+id+":="+ constant);
     String c = constant.toString();
     sym.insert(c,"STRING",c,false);:};
-
+assignment ::= IDENTIFIER:id ASSIG sliceAndConcat_sentence {:
+    System.out.println("Assignment "+id+":= sliceAndConcat");
+:};
 // Init
 sentence ::= init_sentence {: System.out.println("INIT"); :};
 init_sentence ::= INIT OPEN_CURLY_BRACKET init_line CLOSE_CURLY_BRACKET {: System.out.println("Bloque INIT"); :};
@@ -159,6 +169,14 @@ sentence ::= while_sentence {: System.out.println("While"); :};
 while_sentence ::= WHILE OPEN_BRACKET condition_sentence CLOSE_BRACKET while_line {: System.out.println("While sentence"); :};
 while_line ::= OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {: System.out.println("While line"); :};
 
+// sumFirstPrimes
+sentence ::= sumFirstPrimes_sentence {: System.out.println("sumFirstPrimes"); :};
+sumFirstPrimes_sentence::= SUM_FIRST_PRIMES OPEN_BRACKET INTEGER_CONSTANT CLOSE_BRACKET {: System.out.println("sumFirstPrimes sentence"); :};
+
+//sliceAndConcat
+sentence ::= sliceAndConcat_sentence {: System.out.println("sliceAndConcat"); :};
+sliceAndConcat_sentence ::= SLICE_AND_CONCAT OPEN_BRACKET INTEGER_CONSTANT COMMA INTEGER_CONSTANT COMMA STRING_CONSTANT COMMA STRING_CONSTANT COMMA INTEGER_CONSTANT CLOSE_BRACKET  {: System.out.println("sliceAndConcat sentence"); :};
+
 // Expressions
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
@@ -182,3 +200,9 @@ factor ::= INTEGER_CONSTANT:constant {:
 :};
 
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+
+factor ::= sumFirstPrimes_sentence {:
+    System.out.println("factor = sumFirstPrimes(INTEGER_CONSTANT)");
+:};
+
+

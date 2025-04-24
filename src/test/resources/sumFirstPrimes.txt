@@ -1,0 +1,2 @@
+sumFirstPrimes(50)
+x := sumFirstPrimes(10)

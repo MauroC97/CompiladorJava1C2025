@@ -3,7 +3,6 @@ package lyc.compiler;
 import java_cup.runtime.Symbol;
 import lyc.compiler.factories.ParserFactory;
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -86,6 +85,18 @@ public class ParserTest {
     void whileStatement() throws Exception {
         System.out.println("### While test ###");
         compilationSuccessful(readFromResources("while.txt"));
+    }
+
+    @Test
+    void sumFirstPrimesStatement() throws Exception {
+        System.out.println("### Sum First Primes test ###");
+        compilationSuccessful(readFromResources("sumFirstPrimes.txt"));
+    }
+
+    @Test
+    void SliceAndConcatStatement() throws Exception {
+        System.out.println("### Slice And Concats test ###");
+        compilationSuccessful(readFromResources("sliceAndConcat.txt"));
     }
 
     private void compilationSuccessful(String input) throws Exception {
