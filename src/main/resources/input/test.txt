@@ -20,3 +20,8 @@ while (a > b)
         }
     }
 }
+
+sumFirstPrimes(5)
+x := sumFirstPrimes(10)  #+ "10" es la constante que se usara para la sumatoria de primos +#
+
+y := sliceAndConcat(3, 6, "amarillo", "verde", 0)

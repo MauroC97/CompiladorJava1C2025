@@ -47,6 +47,9 @@ terminal INT;
 terminal STRING;
 terminal FLOAT;
 
+terminal SUM_FIRST_PRIMES;
+terminal SLICE_AND_CONCAT;
+
 // Non Terminals
 non terminal program;
 non terminal block;
@@ -69,6 +72,8 @@ non terminal else_sentence;
 non terminal while_sentence;
 non terminal while_line;
 non terminal condition_sentence;
+non terminal sumFirstPrimes_sentence;
+non terminal sliceAndConcat_sentence;
 
 // Start Symbol Definition
 start with program;
@@ -159,6 +164,14 @@ sentence ::= while_sentence {: System.out.println("While"); :};
 while_sentence ::= WHILE OPEN_BRACKET condition_sentence CLOSE_BRACKET while_line {: System.out.println("While sentence"); :};
 while_line ::= OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {: System.out.println("While line"); :};
 
+// sumFirstPrimes
+sentence ::= sumFirstPrimes_sentence {: System.out.println("sumFirstPrimes"); :};
+sumFirstPrimes_sentence::= SUM_FIRST_PRIMES OPEN_BRACKET INTEGER_CONSTANT CLOSE_BRACKET {: System.out.println("sumFirstPrimes sentence"); :};
+
+//sliceAndConcat
+sentence ::= sliceAndConcat_sentence {: System.out.println("sliceAndConcat"); :};
+sliceAndConcat_sentence ::= SLICE_AND_CONCAT OPEN_BRACKET INTEGER_CONSTANT COMMA INTEGER_CONSTANT COMMA STRING_CONSTANT COMMA STRING_CONSTANT COMMA INTEGER_CONSTANT CLOSE_BRACKET  {: System.out.println("sliceAndConcat sentence"); :};
+
 // Expressions
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
@@ -182,3 +195,11 @@ factor ::= INTEGER_CONSTANT:constant {:
 :};
 
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+
+factor ::= SUM_FIRST_PRIMES OPEN_BRACKET INTEGER_CONSTANT CLOSE_BRACKET {:
+    System.out.println("factor = sumFirstPrimes(INTEGER_CONSTANT)");
+:};
+
+factor ::= SLICE_AND_CONCAT OPEN_BRACKET INTEGER_CONSTANT COMMA INTEGER_CONSTANT COMMA STRING_CONSTANT COMMA STRING_CONSTANT COMMA INTEGER_CONSTANT CLOSE_BRACKET {:
+    System.out.println("factor = sliceAndConcat(INTEGER_CONSTANT,INTEGER_CONSTANT,STRING_CONSTANT,STRING_CONSTANT,INTEGER_CONSTANT)");
+:};

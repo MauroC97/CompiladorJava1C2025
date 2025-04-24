@@ -1,0 +1,11 @@
+y := sliceAndConcat(3, 6, "amarillo", "verde", 0)
+#+limiteInicial :=0+#
+#+limiteFinal :=3+#
+#+palabra1 :="amarillooooooo"+#
+#+palabra2 :="verdeeeee"+#
+#+primero:=0+#
+#+y2 := sliceAndConcat(limiteInicial, limiteFinal, palabra1, palabra2, primero)+#
+#+y2 := sliceAndConcat(3, 6, 5, "verde", 0)+#
+#+y2 := sliceAndConcat(3, "6", "amarillo",, "verde", 0)+#
+#+y2 := sliceAndConcat(3, "6", 5, "verde", 0.5)+#
+#+y2 := sliceAndConcat(3, 6, "amarillo", "verde", "SI")+#

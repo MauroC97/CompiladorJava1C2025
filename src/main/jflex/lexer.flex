@@ -78,6 +78,8 @@ Write = "write"
 If = "if"
 Else = "else"
 While = "while"
+SumFirstPrimes = "sumFirstPrimes"
+SliceAndConcat = "sliceAndConcat"
 %%
 
 
@@ -95,6 +97,8 @@ While = "while"
   {If}                                     { return symbol(ParserSym.IF); }
   {Else}                                   { return symbol(ParserSym.ELSE); }
   {While}                                  { return symbol(ParserSym.WHILE); }
+  {SumFirstPrimes}                         { return symbol(ParserSym.SUM_FIRST_PRIMES); }
+  {SliceAndConcat}                         { return symbol(ParserSym.SLICE_AND_CONCAT); }
   /* tipos de dato */
   {Int}                                   { return symbol(ParserSym.INT); }
   {Float}                                 { return symbol(ParserSym.FLOAT); }
