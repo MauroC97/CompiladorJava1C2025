@@ -39,6 +39,9 @@ public class Symbol_lyc {
     @Override
     public String toString() {
         String format = "%-10s│%-50s│%-10s";
+        if (!this.type.equals("STRING") && !this.type.equals("CTE_STRING")) {
+            return String.format(format,this.type,this.value,"");
+        }
         return String.format(format,this.type,this.value,this.length);
     }
 }

@@ -28,6 +28,14 @@ public class LexerTest {
   }
 
   @Test
+  public void invalidComment() throws Exception{
+    assertThrows(UnknownCharacterException.class, () -> {
+      scan("#+###This is a comment####+#");
+      nextToken();
+    });
+  }
+
+  @Test
   public void invalidStringConstantLength() {
     assertThrows(InvalidLengthException.class, () -> {
       scan("\"%s\"".formatted(getRandomString()));

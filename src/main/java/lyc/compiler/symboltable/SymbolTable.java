@@ -20,7 +20,8 @@ public final class SymbolTable {
     public void insert(String name,String type, String value, boolean isID){
         if(!isID){
             //constantes empiezan con _ para diferenciar de las IDs
-            name = "_"+name;
+            name = "_" + name;
+            type = "CTE_" + type;
         }
         table.put(name,new Symbol_lyc(value,type));
     }

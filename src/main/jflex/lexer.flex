@@ -167,7 +167,12 @@ SliceAndConcat = "sliceAndConcat"
   {NotEqual}                                { return symbol(ParserSym.NOT_EQUAL); }
   /* whitespace, comment */
   {WhiteSpace}                   { /* ignore */ }
-  {Comment}                      { /* ignore */ }
+  {Comment}                      { 
+        String value = yytext().substring(1, yytext().length() - 1);;
+        if (value.indexOf('#') != -1) {
+            throw new UnknownCharacterException(yytext());
+        }
+    }
 }
 
 
