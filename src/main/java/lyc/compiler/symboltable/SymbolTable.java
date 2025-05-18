@@ -23,7 +23,7 @@ public final class SymbolTable {
             name = "_" + name;
             type = "CTE_" + type;
         }
-        table.put(name,new Symbol_lyc(value,type));
+        table.put(name,new Symbol_lyc(name,value,type));
     }
 
     public Symbol_lyc get(String name){

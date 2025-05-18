@@ -2,14 +2,16 @@ package lyc.compiler.symboltable;
 
 //Symbol_lyc para diferenciarlo de java_cup.runtime.Symbol
 public class Symbol_lyc {
+    public String name;
     public String type;
     public String value;
     public int length;
 
-    public Symbol_lyc(String value, String type) {
+    public Symbol_lyc(String name, String value, String type) {
         this.type = type;
         this.value = value;
         this.length = value.length();
+        this.name = name;
     }
 
     public String getType() {
@@ -36,12 +38,20 @@ public class Symbol_lyc {
         this.value = value;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        String format = "%-10s│%-50s│%-10s";
+        String format = "%-50s│%-10s│%-50s│%-10s";
         if (!this.type.equals("STRING") && !this.type.equals("CTE_STRING")) {
-            return String.format(format,this.type,this.value,"");
+            return String.format(format,this.name,this.type,this.value,"");
         }
-        return String.format(format,this.type,this.value,this.length);
+        return String.format(format,this.name,this.type,this.value,this.length);
     }
 }
